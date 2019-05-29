@@ -88,8 +88,8 @@ docker.sidecar_injector: pilot/docker/Dockerfile.sidecar_injector
 docker.sidecar_injector:$(ISTIO_DOCKER)/sidecar-injector
 	$(DOCKER_RULE)
 
-# BUILD_PRE tells $(DOCKER_RULE) to run the command specified before executing a docker build
-# BUILD_ARGS tells  $(DOCKER_RULE) to execute a docker build with the specified commands
+# BUILD_PRE tells $(DOCKER_RULE) to run the command specified before executing a docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/
+# BUILD_ARGS tells  $(DOCKER_RULE) to execute a docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ with the specified commands
 
 docker.proxy_debug: BUILD_PRE=mv envoy-debug-${PROXY_REPO_SHA} envoy &&
 docker.proxy_debug: BUILD_ARGS=--build-arg proxy_version=istio-proxy:${PROXY_REPO_SHA} --build-arg istio_version=${VERSION}
@@ -161,7 +161,7 @@ ifeq ($(DEBUG_IMAGE),1)
 	sed -e "s,FROM scratch,FROM $(HUB)/proxy_debug:$(TAG)," $(ISTIO_DOCKER)/testapp/Dockerfile.appdbg > $(ISTIO_DOCKER)/testapp/Dockerfile.appd
 endif
 	time (cd $(ISTIO_DOCKER)/testapp && \
-		docker build -t $(HUB)/app:$(TAG) -f Dockerfile.app .)
+		docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ -t $(HUB)/app:$(TAG) -f Dockerfile.app .)
 
 # Test policy backend for mixer integration
 docker.test_policybackend: mixer/docker/Dockerfile.test_policybackend
@@ -232,10 +232,10 @@ docker.node-agent-test: $(ISTIO_DOCKER)/node_agent.key
 # 1. Make a directory $(DOCKER_BUILD_TOP)/%@
 # 2. This rule uses cp to copy all dependency filenames into into $(DOCKER_BUILD_TOP/$@
 # 3. This rule then changes directories to $(DOCKER_BUID_TOP)/$@
-# 4. This rule runs $(BUILD_PRE) prior to any docker build and only if specified as a dependency variable
-# 5. This rule finally runs docker build passing $(BUILD_ARGS) to docker if they are specified as a dependency variable
+# 4. This rule runs $(BUILD_PRE) prior to any docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ and only if specified as a dependency variable
+# 5. This rule finally runs docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ passing $(BUILD_ARGS) to docker if they are specified as a dependency variable
 
-DOCKER_RULE=time (mkdir -p $(DOCKER_BUILD_TOP)/$@ && cp -r $^ $(DOCKER_BUILD_TOP)/$@ && cd $(DOCKER_BUILD_TOP)/$@ && $(BUILD_PRE) docker build $(BUILD_ARGS) -t $(HUB)/$(subst docker.,,$@):$(TAG) -f Dockerfile$(suffix $@) .)
+DOCKER_RULE=time (mkdir -p $(DOCKER_BUILD_TOP)/$@ && cp -r $^ $(DOCKER_BUILD_TOP)/$@ && cd $(DOCKER_BUILD_TOP)/$@ && $(BUILD_PRE) docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ $(BUILD_ARGS) -t $(HUB)/$(subst docker.,,$@):$(TAG) -f Dockerfile$(suffix $@) .)
 
 # This target will package all docker images used in test and release, without re-building
 # go binaries. It is intended for CI/CD systems where the build is done in separate job.
@@ -273,18 +273,18 @@ docker.push: $(DOCKER_PUSH_TARGETS)
 # Base image for 'debug' containers.
 # You can run it first to use local changes (or guarantee it is built from scratch)
 docker.basedebug:
-	docker build -t istionightly/base_debug -f docker/Dockerfile.xenial_debug docker/
+	docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ -t istionightly/base_debug -f docker/Dockerfile.xenial_debug docker/
 
 # Run this target to generate images based on Bionic Ubuntu
 # This must be run as a first step, before the 'docker' step.
 docker.basedebug_bionic:
-	docker build -t istionightly/base_debug_bionic -f docker/Dockerfile.bionic_debug docker/
+	docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ -t istionightly/base_debug_bionic -f docker/Dockerfile.bionic_debug docker/
 	docker tag istionightly/base_debug_bionic istionightly/base_debug
 
 # Run this target to generate images based on Debian Slim
 # This must be run as a first step, before the 'docker' step.
 docker.basedebug_deb:
-	docker build -t istionightly/base_debug_deb -f docker/Dockerfile.deb_debug docker/
+	docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ -t istionightly/base_debug_deb -f docker/Dockerfile.deb_debug docker/
 	docker tag istionightly/base_debug_deb istionightly/base_debug
 
 # Job run from the nightly cron to publish an up-to-date xenial with the debug tools.

@@ -38,11 +38,13 @@ import (
 	stdio "istio.io/istio/mixer/adapter/stdio"
 	zipkin "istio.io/istio/mixer/adapter/zipkin"
 	adptr "istio.io/istio/mixer/pkg/adapter"
+	authz "istio.io/istio/mixer/adapter/authz"
 )
 
 // Inventory returns the inventory of all available adapters.
 func Inventory() []adptr.InfoFn {
 	return []adptr.InfoFn{
+		authz.GetInfo,
 		bypass.GetInfo,
 		circonus.GetInfo,
 		cloudwatch.GetInfo,

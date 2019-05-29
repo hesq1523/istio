@@ -25,6 +25,10 @@ ENV ISTIO_META_INTERCEPTION_MODE TPROXY
 
 ADD envoy /usr/local/bin/envoy
 
+# Install libnats since we customized envoy to receive NATs messages to update list of revoked JWT.
+ADD libnats.so /usr/lib/libnats.so
+ADD libprotobuf-c.so /usr/lib/libprotobuf-c.so
+
 ADD pilot-agent /usr/local/bin/pilot-agent
 
 # pilot-agent and envoy may run with effective uid 0 in order to run envoy with

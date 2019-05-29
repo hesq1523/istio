@@ -45,7 +45,7 @@ function add_license_to_tar_images() {
     docker load -i "${TAR_PATH}"
     echo "FROM istio/${IMAGE_NAME}:${TAG}
 COPY LICENSES.txt /" > Dockerfile
-    docker build -t              "${HUB}/${IMAGE_NAME}:${TAG}" .
+    docker build --build-arg https_proxy=http://15.85.195.199:8080/ --build-arg http_proxy=http://15.85.195.199:8080/ -t              "${HUB}/${IMAGE_NAME}:${TAG}" .
     # Include the license text in the tarball as well (overwrite old $TAR_PATH).
     docker save -o "${TAR_PATH}" "${HUB}/${IMAGE_NAME}:${TAG}"
   done
