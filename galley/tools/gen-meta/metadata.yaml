@@ -235,6 +235,15 @@ resources:
 
 ## Mixer Adapter Types
 
+  - kind:        "authz"
+    singular:    "authz"
+    plural:      "authzs"
+    group:       "config.istio.io"
+    version:     "v1alpha2"
+    proto:       "type.googleapis.com/google.protobuf.Struct"
+    protoPackage: "github.com/gogo/protobuf/types"
+    collection:  "istio/config/v1alpha2/legacy/authzs"
+
   - kind:        "bypass"
     singular:    "bypass"
     plural:      "bypasses"

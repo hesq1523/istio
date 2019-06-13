@@ -1,0 +1,43 @@
+apiVersion: "config.istio.io/v1alpha2"
+kind: authz
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  service_url: "http://hp-authz-service.hp/authz/v1/authorize"
+  cache_duration: "0s"
+
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: authorization
+metadata:
+  name: authzrequestcontext
+  namespace: istio-system
+spec:
+  subject:
+    user: request.auth.principal | ""
+    groups: request.auth.principal | ""
+    properties:
+      service: source.service | ""
+      namespace: source.namespace | ""
+  action:
+    namespace: destination.namespace | ""
+    service: destination.service | ""
+    method: request.method | ""
+    path: request.path | ""
+    properties:
+      token: request.headers["authorization"] | ""
+
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: authzrule
+  namespace: istio-system
+spec:
+  match: destination.labels["layer"] == "L1"
+  actions:
+    - handler: handler.authz
+      instances:
+        - authzrequestcontext.authorization
+

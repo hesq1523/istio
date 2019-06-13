@@ -25,6 +25,7 @@ import (
 	"istio.io/istio/galley/pkg/runtime/resource"
 	"istio.io/istio/galley/pkg/source/kube/schema"
 	"istio.io/istio/mixer/pkg/config/store"
+	"istio.io/istio/pkg/log"
 )
 
 // mapping between MCP collections and and CRD Kinds.
@@ -52,6 +53,7 @@ func constructMapping(allKinds []string, schema *schema.Instance) (*mapping, err
 		if _, ok := mixerKindMap[spec.Kind]; ok {
 			kindToCollection[spec.Kind] = spec.Target.Collection.String()
 			collectionToKind[spec.Target.Collection.String()] = spec.Kind
+			log.Infof("mixer crd kind: %s, Collection: %s", spec.Kind, spec.Target.Collection.String())
 		}
 	}
 

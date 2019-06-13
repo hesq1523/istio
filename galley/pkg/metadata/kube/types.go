@@ -95,6 +95,17 @@ func init() {
 	})
 
 	b.Add(schema.ResourceSpec{
+		Kind:      "authz",
+		ListKind:  "authzList",
+		Singular:  "authz",
+		Plural:    "authzs",
+		Version:   "v1alpha2",
+		Group:     "config.istio.io",
+		Target:    metadata.Types.Get("istio/config/v1alpha2/legacy/authzs"),
+		Converter: converter.Get("identity"),
+	})
+
+	b.Add(schema.ResourceSpec{
 		Kind:      "bypass",
 		ListKind:  "bypassList",
 		Singular:  "bypass",

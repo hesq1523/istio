@@ -212,6 +212,7 @@ func (s *fsStore) Init(kinds []string) error {
 		s.kinds[k] = true
 	}
 	s.checkAndUpdate()
+	/*
 	go func() {
 		tick := time.NewTicker(s.checkDuration)
 		for {
@@ -224,6 +225,7 @@ func (s *fsStore) Init(kinds []string) error {
 			}
 		}
 	}()
+	 */
 	return nil
 }
 

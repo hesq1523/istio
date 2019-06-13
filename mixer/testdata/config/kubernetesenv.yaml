@@ -6,6 +6,7 @@ metadata:
 spec:
   compiledAdapter: kubernetesenv
   params:
+    kubeconfig_path: "/home/hexi/.kube/config"
     # when running from mixer root, use the following config after adding a
     # symbolic link to a kubernetes config file via:
     #

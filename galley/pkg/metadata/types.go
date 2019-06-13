@@ -61,6 +61,9 @@ var (
 	// istio/config/v1alpha2/legacy/authorizations metadata
 	IstioConfigV1alpha2LegacyAuthorizations resource.Info
 
+	// istio/config/v1alpha2/legacy/authzs metadata
+	IstioConfigV1alpha2LegacyAuthzs resource.Info
+
 	// istio/config/v1alpha2/legacy/bypasses metadata
 	IstioConfigV1alpha2LegacyBypasses resource.Info
 
@@ -145,7 +148,7 @@ var (
 	// istio/config/v1alpha2/legacy/tracespans metadata
 	IstioConfigV1alpha2LegacyTracespans resource.Info
 
-	// istio/config/v1alpha2/legacy/tracespans metadata
+	// istio/config/v1alpha2/legacy/zipkins metadata
 	IstioConfigV1alpha2LegacyZipkins resource.Info
 
 	// istio/config/v1alpha2/templates metadata
@@ -238,6 +241,9 @@ func init() {
 		"type.googleapis.com/type.googleapis.com/google.protobuf.Struct")
 	IstioConfigV1alpha2LegacyAuthorizations = b.Register(
 		"istio/config/v1alpha2/legacy/authorizations",
+		"type.googleapis.com/type.googleapis.com/google.protobuf.Struct")
+	IstioConfigV1alpha2LegacyAuthzs = b.Register(
+		"istio/config/v1alpha2/legacy/authzs",
 		"type.googleapis.com/type.googleapis.com/google.protobuf.Struct")
 	IstioConfigV1alpha2LegacyBypasses = b.Register(
 		"istio/config/v1alpha2/legacy/bypasses",
